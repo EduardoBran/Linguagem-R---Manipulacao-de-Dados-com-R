@@ -34,3 +34,43 @@ str(sono_df)
 glimpse(sono_df)
 
 
+
+# Aplicando mutate junto com glimpse() para criar uma nova coluna e apenas visualizar de maneira rápida
+
+glimpse(mutate(sono_df, peso_libras = sono_total / 0.45359237))
+
+
+
+# Contagem
+
+count(sono_df, cidade)
+count(sono_df, pais)
+
+
+# Histograma
+
+hist(sono_df$sono_total)
+hist(sono_df$peso)
+
+
+
+
+# Amostragem (vai no dataset e coleta uma amostra de tamanho 10, bastante útilo em análises estatítiscas)
+
+sample_n(sono_df, size = 10)
+
+
+
+# Função select()
+
+sleep_nome_sonototal <- select(sono_df, nome, sono_total)   # cria um novo df com apenas as colunas nome e sono_total
+
+View(select(sono_df, nome))
+
+View(select(sono_df, nome:cidade))     # retorna todas as colunas de nome até cidade
+View(select(sono_df, nome:sono_total)) # retorna todas as colunas de nome até sono_total
+
+
+
+
+
