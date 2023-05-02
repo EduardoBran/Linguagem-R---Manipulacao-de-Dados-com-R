@@ -1,0 +1,31 @@
+
+
+
+Dados Brutos  ->  Dados Organizados  ->  Dados Consistentes  ->  Análise  -> Resultado
+___________________________._______________________________
+
+                     Data Wrangling
+		 (Manipulação de Dados)
+
+
+
+
+
+Definição de Data Wrangling -> limpeza, procesamento, organização e manipulação de dados.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

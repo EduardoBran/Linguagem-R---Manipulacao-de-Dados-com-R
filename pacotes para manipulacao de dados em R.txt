@@ -1,0 +1,39 @@
+dplyr
+
+- select()
+- filter()
+- group_by()
+- summarise()
+- arrange()
+- join()
+- mutate()
+
+
+
+tidyr
+
+- gather()
+- spread()
+- separate()
+- unite()
+
+
+
+Falando sobre manipular os dados em R, depende muito de como os dados são fornecidos. Alguns chegam mais organizados e limpos e outros mais desorganizados.
+
+Entretanto algumas atividades provavelmente irão fazer parte do processo.
+E para isso usamos os pacotes dplyr e tidyr.
+
+
+
+
+* tidyr
+
+Este pacote é usado para Remodelagem de Dados, que é a tarefa de converter uma linha em coluna, uma coluna em linha, fazer algum tipo de formato nos dados.
+
+gather() -> tudo que é uma linha vira coluna
+spread() -> tudo que é uma coluna vira linha
+
+separate() -> separa 1 coluna em 3 (ex: uma coluna de dada com dia, mês e ano onde podemos dividir em 3 				    colunas: coluna dia, coluna mês, coluna ano)
+
+unite() -> junto colunas e coluna em 1 coluna
