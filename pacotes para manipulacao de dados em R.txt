@@ -37,3 +37,33 @@ spread() -> tudo que é uma coluna vira linha
 separate() -> separa 1 coluna em 3 (ex: uma coluna de dada com dia, mês e ano onde podemos dividir em 3 				    colunas: coluna dia, coluna mês, coluna ano)
 
 unite() -> junto colunas e coluna em 1 coluna
+
+
+Podemos com apenas uma função acima mudar completamente o formato (shape) dos nossos dados.
+
+
+
+
+
+* dplyr
+
+Este pacote é usado para Transformação dos Dados, ele trabalha / complementa o que foi feito com o tidyr.
+
+
+select() -> seleciona parte dos dados
+filter() -> filtra os dados
+
+group_by()  -> agrupar os dados
+summarise() -> sumarizar os dados
+
+- arrange() -> reorganizar as linhas em uma coluna ou mais de uma coluna
+
+- mutate()  ->  realizar cálculos dentro de uma mesma coluna
+
+- join() - unir dois ou mais datasets.
+
+
+
+ctrl + shift + m - %>%
+
+
