@@ -59,6 +59,40 @@ View( filter(dados_flights, UniqueCarrier %in% c("AA", "UA")) ) # mesma coisa do
 
 
 
+# Utilizando select() 
+
+View( select(dados_flights, Year:DayofMonth) )     # seleciona todas as colunas de Year até DayofMonth
+
+View( select(dados_flights, Year:DayofMonth, contains("Taxi"), contains("Delay")) )
+# seleciona todas as colunas de Year até DayofMonth e colunas que contem "Taxi" e "Delay" no nome
+
+
+
+# Organizando os dados
+
+flights <- 
+  dados_flights %>% 
+  select(UniqueCarrier, DepDelay) %>%         # selecionando colunas
+  arrange(DepDelay)                           # organizando por ordem crescente da coluna DepDelay
+
+
+flights2 <- 
+  dados_flights %>% 
+  select(Distance, AirTime) %>%               # selecionando colunas
+  mutate(Speed = Distance / AirTime * 60)     # adicionando nova coluna Speed                       
+
+
+head(aggregate(ArrDelay ~ Dest, dados_flights, mean))
+
+
+# contar o número de voos em cada combinação de mês e dia do mês.
+
+flights3 <- 
+  dados_flights %>% 
+  group_by(Month, DayofMonth) %>% 
+  tally(sort = TRUE)
+
+
 
 
 
