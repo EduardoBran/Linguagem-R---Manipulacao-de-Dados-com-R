@@ -46,7 +46,7 @@ View( data.frame(head(dados_flights)) )
 
 # Filtrando os dados com slice
 
-View(dados_flights[dados_flights$Month == 1 & dados_flights$DayofMonth == 1, ])
+View( dados_flights[dados_flights$Month == 1 & dados_flights$DayofMonth == 1, ] )
 
 
 # Filtrando os dados com filter()
