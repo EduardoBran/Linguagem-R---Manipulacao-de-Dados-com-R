@@ -154,8 +154,5 @@ dados3_organizado_grafico %>%
   facet_wrap(~ group) +
   geom_smooth(method = 'lm', aes(group = 1), se = F)
   
-  
-  
-
 
 
