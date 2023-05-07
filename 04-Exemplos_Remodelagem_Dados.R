@@ -222,6 +222,37 @@ View(estoque_res2)
 
 
 
+# Exercício 5
+  
+#  Considere o seguinte dataframe com informações sobre pedidos de uma loja:
+  
+pedidos <- data.frame(
+  id_pedido = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+  data_pedido = c("2021-01-01", "2021-02-02", "2021-02-15", "2021-03-03", "2021-03-20", "2021-01-01",
+                  "2021-02-02", "2021-01-01", "2021-02-02", "2021-02-15", "2021-03-03", "2021-02-02"),
+  valor_pedido = c(100, 200, 150, 300, 250, 100, 500, 100, 5000, 1000, 2000, 4000),
+  status_pedido = c("entregue", "entregue", "cancelado", "entregue", "cancelado", "entregue",
+                    "entregue", "cancelado", "entregue", "cancelado", "entregue", "cancelado")
+)
+View(pedidos)
+pedidos
+
+# - Remodele os dados de modo que tenhamos uma coluna para a data, uma coluna para o status do pedido e uma coluna para
+#   o valor total dos pedidos para cada combinação de data e status.
+
+pedidos_res <- 
+  pedidos %>% 
+  group_by(data_pedido, status_pedido) %>% 
+  summarise(valor_total = sum(valor_pedido))
+
+View(pedidos_res)
+
+
+
+
+
+
+
 
 
 
