@@ -252,6 +252,225 @@ View(pedidos_res)
 
 
 
+# Exercício 6
+
+#  Considere o seguinte dataframe com informações sobre vendas de produtos em diferentes lojas:
+
+vendas <- data.frame(
+  loja = c("Loja A", "Loja B", "Loja C"),
+  produto_1 = c(100, 150, 200),
+  produto_2 = c(50, 75, 100),
+  produto_3 = c(200, 250, 300)
+)
+
+View(vendas)
+
+# a. Remodele os dados de modo que tenhamos uma coluna para o produto, uma coluna para a loja e uma coluna para a
+#    quantidade vendida.
+
+vendas_a <- 
+  vendas %>% 
+  gather(produto, qtd_vendida, -loja)
+
+View(vendas_a)
+
+
+# b. Crie uma nova coluna que contenha o total de vendas de cada loja.
+
+total_vendas_por_loja <- 
+  vendas_a %>% 
+  group_by(loja) %>% 
+  summarise(total_vendas = sum(qtd_vendida))
+
+View(total_vendas_por_loja)
+  
+
+# c. Crie um gráfico de barras que mostre o total de vendas de cada loja.
+
+ggplot(data = total_vendas_por_loja,
+       aes(x = loja, y = total_vendas)) +
+  geom_col()
+  
+ggplot(data = total_vendas_por_loja,
+       aes(x = loja, y = total_vendas)) +
+  geom_bar(stat = "identity")
+
+
+
+
+
+
+# Exercício 8
+
+#   Considere o seguinte dataframe com informações sobre vendas de produtos em diferentes regiões:
+  
+vendas <- data.frame(
+  regiao = c("Norte", "Norte", "Nordeste", "Nordeste", "Sudeste", "Sudeste"),
+  produto = c("produto_1", "produto_2", "produto_1", "produto_2", "produto_1", "produto_2"),
+  janeiro = c(100, 50, 200, 100, 300, 150),
+  fevereiro = c(150, 75, 250, 125, 350, 175),
+  marco = c(200, 100, 300, 150, 400, 200)
+)
+View(vendas)
+
+# a. Remodele os dados de modo que tenhamos uma coluna para o produto, uma coluna para a região, uma coluna para o mês
+#    e uma coluna para a quantidade vendida.
+
+vendas_a <- 
+  vendas %>% 
+  gather(mes, qtd_vendida, -regiao, -produto)
+
+View(vendas_a)
+
+# b. Crie uma nova coluna que contenha o total de vendas de cada produto em cada região.
+
+vendas_qtd_vendida <- 
+  vendas_a %>% 
+  group_by(regiao) %>% 
+  summarise(total_de_vendas = sum(qtd_vendida))
+
+View(vendas_qtd_vendida)
+
+# c. Crie um gráfico de barras que mostre o total de vendas de cada produto em cada região.
+
+ggplot(data = vendas_qtd_vendida,
+       aes(x = regiao,
+           y = total_de_vendas)) +
+  geom_bar(stat = 'identity')
+
+
+
+
+
+
+# Exercício 9
+  
+#  Considere o seguinte dataframe com informações sobre pacientes em um hospital:
+
+set.seed(123)
+
+pacientes <- data.frame(
+  id = 1:1000,
+  idade = sample(18:90, 1000, replace = TRUE),
+  sexo = sample(c("M", "F"), 1000, replace = TRUE),
+  pressao_sanguinea = sample(90:180, 1000, replace = TRUE),
+  diabetes = sample(c("Sim", "Não"), 1000, replace = TRUE),
+  colesterol = sample(150:300, 1000, replace = TRUE),
+  cancer = sample(c("Sim", "Não"), 1000, replace = TRUE),
+  obesidade = sample(c("Sim", "Não"), 1000, replace = TRUE),
+  fumante = sample(c("Sim", "Não"), 1000, replace = TRUE),
+  internado = sample(c("Sim", "Não"), 1000, replace = TRUE)
+)
+View(pacientes)
+
+# a) Crie uma nova coluna chamada idade_grupo que agrupa a idade dos pacientes em faixas etárias:
+#
+#    18-29, 30-39, 40-49, 50-59, 60-69, 70-79 e 80-90.
+
+
+# utilizando função cut()
+
+pacientes_a <- pacientes
+
+pacientes_a$idade_grupo <- cut(pacientes_a$idade,
+                               breaks = c(17, 29, 39, 49, 59, 69, 79, 90),
+                               labels = c('18-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-90'))
+View(pacientes_a)
+
+
+# utilizando mutate() e case_when() do pacote dplyr
+
+pacientes_a2 <- pacientes
+
+pacientes_a2 <- pacientes_a2 %>%
+  mutate(idade_grupo = case_when(
+    idade >= 18 & idade <= 29 ~ "18-29",
+    idade >= 30 & idade <= 39 ~ "30-39",
+    idade >= 40 & idade <= 49 ~ "40-49",
+    idade >= 50 & idade <= 59 ~ "50-59",
+    idade >= 60 & idade <= 69 ~ "60-69",
+    idade >= 70 & idade <= 79 ~ "70-79",
+    idade >= 80 & idade <= 90 ~ "80-90",
+    TRUE ~ NA_character_                      # se nenhuma das faixas etárias especificadas na função for atendida, o valor "NA" será atribuído à nova coluna "idade_grupo".
+  ))
+
+View(pacientes_a2)
+
+
+# b) Crie um novo dataframe chamado pacientes_fumantes que contenha apenas as informações dos pacientes que são fumantes.
+
+pacientes_fumantes <- 
+  pacientes %>% 
+  filter(fumante == "Sim")
+
+View(pacientes_fumantes)
+
+
+# c) Crie um novo dataframe chamado pacientes_internados que contenha apenas as informações dos pacientes que foram
+#    internados.
+
+pacientes_internados <- 
+  pacientes %>% 
+  filter(internado == "Sim")
+
+View(pacientes_internados)
+
+
+
+
+
+
+# Exercício 10
+  
+#  Considere o seguinte dataframe com informações sobre vendas de produtos em diferentes lojas:
+  
+vendas <- data.frame(
+  loja = sample(c("Loja A", "Loja B", "Loja C", "Loja D"), 1000, replace = TRUE),
+  produto = sample(c("produto_1", "produto_2", "produto_3"), 1000, replace = TRUE),
+  quantidade = sample(1:100, 1000, replace = TRUE),
+  preco_unitario = sample(1:50, 1000, replace = TRUE)
+)
+View(vendas)
+
+# a) Crie uma nova coluna chamada receita que calcule a receita de cada venda.
+
+
+# b) Crie um novo dataframe chamado vendas_produto_1 que contenha apenas as informações das vendas do produto 1.
+
+
+# c) Crie um novo dataframe chamado vendas_por_loja que contenha a quantidade de vendas e a receita total de cada loja.
+
+
+
+
+
+
+# Exercício 11
+  
+#  Considere o seguinte dataframe com informações sobre despesas de um estabelecimento comercial:
+  
+despesas <- data.frame(
+  data = seq(as.Date("2021-01-01"), by = "day", length.out = 1000),
+  descricao = sample(c("Aluguel", "Água", "Luz", "Telefone", "Internet", "Material de escritório"), 1000, replace = TRUE),
+  valor = sample(1:1000, 1000, replace = TRUE)
+)
+View(despesas)
+
+# a) Crie uma nova coluna chamada mes que contenha o mês de cada despesa.
+
+
+# b) Crie um novo dataframe chamado despesas_aluguel que contenha apenas as informações das despesas com aluguel.
+
+
+# c) Crie um novo dataframe chamado
+
+
+
+
+
+
+
+
 
 
 
