@@ -420,49 +420,6 @@ View(pacientes_internados)
 
 
 
-# Exercício 10
-  
-#  Considere o seguinte dataframe com informações sobre vendas de produtos em diferentes lojas:
-  
-vendas <- data.frame(
-  loja = sample(c("Loja A", "Loja B", "Loja C", "Loja D"), 1000, replace = TRUE),
-  produto = sample(c("produto_1", "produto_2", "produto_3"), 1000, replace = TRUE),
-  quantidade = sample(1:100, 1000, replace = TRUE),
-  preco_unitario = sample(1:50, 1000, replace = TRUE)
-)
-View(vendas)
-
-# a) Crie uma nova coluna chamada receita que calcule a receita de cada venda.
-
-
-# b) Crie um novo dataframe chamado vendas_produto_1 que contenha apenas as informações das vendas do produto 1.
-
-
-# c) Crie um novo dataframe chamado vendas_por_loja que contenha a quantidade de vendas e a receita total de cada loja.
-
-
-
-
-
-
-# Exercício 11
-  
-#  Considere o seguinte dataframe com informações sobre despesas de um estabelecimento comercial:
-  
-despesas <- data.frame(
-  data = seq(as.Date("2021-01-01"), by = "day", length.out = 1000),
-  descricao = sample(c("Aluguel", "Água", "Luz", "Telefone", "Internet", "Material de escritório"), 1000, replace = TRUE),
-  valor = sample(1:1000, 1000, replace = TRUE)
-)
-View(despesas)
-
-# a) Crie uma nova coluna chamada mes que contenha o mês de cada despesa.
-
-
-# b) Crie um novo dataframe chamado despesas_aluguel que contenha apenas as informações das despesas com aluguel.
-
-
-# c) Crie um novo dataframe chamado
 
 
 
