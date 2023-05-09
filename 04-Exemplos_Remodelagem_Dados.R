@@ -15,6 +15,8 @@ library(dplyr)
 library(tidyr)
 library(stringr)  # necessario para usar a funcao mutate()
 
+library(lubridate) # necessario para funcao de data
+
 library(ggplot2)
 
 
@@ -420,13 +422,119 @@ View(pacientes_internados)
 
 
 
+# Exercício 10
+  
+#  Considere o seguinte dataframe com informações sobre vendas de produtos em diferentes lojas:
+  
+vendas <- data.frame(
+  loja = sample(c("Loja A", "Loja B", "Loja C", "Loja D"), 1000, replace = TRUE),
+  produto = sample(c("produto_1", "produto_2", "produto_3"), 1000, replace = TRUE),
+  quantidade = sample(1:100, 1000, replace = TRUE),
+  preco_unitario = sample(1:50, 1000, replace = TRUE)
+)
+View(vendas)
+
+# a) Crie uma nova coluna chamada receita que calcule a receita de cada venda.
+
+vendas2 <- 
+  vendas %>% 
+  mutate(receita = quantidade * preco_unitario)
+
+View(vendas2)
+
+
+# b) Crie um novo dataframe chamado vendas_produto_1 que contenha apenas as informações das vendas do produto 1.
+
+vendas_produto_1 <- 
+  vendas2 %>% 
+  filter(produto == 'produto_1')
+
+View(vendas_produto_1)
+
+
+# c) Crie um novo dataframe chamado vendas_por_loja que contenha a quantidade de vendas e a receita total de cada loja.
+
+vendas_por_loja <- 
+  vendas2 %>% 
+  group_by(loja) %>% 
+  summarise(
+    qtd_de_vendas = sum(quantidade),
+    total_cada_loja = sum(receita)
+  )
+
+View(vendas_por_loja)
+
+
+# d) Crie um gráfico de barras representando vendas por loja
+
+ggplot(data = vendas_por_loja,
+  aes(x = loja, y = total_cada_loja)) +
+  geom_bar(stat = 'identity')
 
 
 
 
 
+# Exercício 11
+  
+#  Considere o seguinte dataframe com informações sobre despesas de um estabelecimento comercial:
+  
+despesas <- data.frame(
+  data = seq(as.Date("2021-01-01"), by = "day", length.out = 1000),
+  descricao = sample(c("Aluguel", "Água", "Luz", "Telefone", "Internet", "Material de escritório"), 1000, replace = TRUE),
+  valor = sample(1:1000, 1000, replace = TRUE)
+)
+View(despesas)
+
+# a) Crie uma nova coluna chamada mes que contenha o mês de cada despesa.
+
+#dados_despesas <- 
+#  despesas %>% 
+#  separate(col = data, into = c('deletar', 'mes'), sep = '\\-')
+
+#dados_despesas <- 
+#  dados_despesas %>% 
+#  select(mes)
+
+#dados_despesas <- 
+#  despesas %>% 
+#  mutate(dados_despesas)
+
+#dados_despesas <- 
+#  dados_despesas %>% 
+#  select(data, mes, descricao, valor)
 
 
+# usando month()
+
+dados_despesas <-
+  despesas %>%
+  mutate(mes = month(data))
+
+dados_despesas <- 
+  dados_despesas %>% 
+  select(data, mes, descricao, valor)
+
+View(dados_despesas)
+
+
+# b) Crie um novo dataframe chamado despesas_aluguel que contenha apenas as informações das despesas com aluguel.
+
+despesas_aluguel <- 
+  dados_despesas %>% 
+  filter(descricao == 'Aluguel')
+
+View(despesas_aluguel)
+
+
+# c) Crie um novo dataframe chamado total_despesas_mes que contenha o total de despesas por mês
+
+total_despesas_mes <- 
+  dados_despesas %>% 
+  group_by(mes) %>% 
+  summarise(despesas_por_mes = sum(valor))
+
+View(total_despesas_mes)
 
 
 
