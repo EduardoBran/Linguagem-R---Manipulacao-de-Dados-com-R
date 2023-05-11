@@ -13,7 +13,11 @@ getwd()
 
 
 
-# Carregando pacotes
+# Instalando e carregando pacotes
+
+install.packages("reshape2")
+
+library(reshape2)
 
 library(lattice)  # gerar gráficos
 library(ggplot2)  # gerar gráficos
@@ -126,5 +130,115 @@ ggplot(iris_modif2, aes(x = Largura, y = Comprimento, color = Parte)) +   # ggpl
 
 
 
+
+# Reshape2
+
+
+# Criando um dataframe
+
+df <- data.frame(nome = c("Zico", "Pele"),
+                 chuteira = c(40, 42),
+                 idade = c(34, NA),
+                 peso = c(93, NA),
+                 altura = c(175, 178))
+
+df
+
+
+# "Derretendo" o dataframe df com a Função melt(). "Derreter" (ou "meltar") um dataframe significa transformá-lo de um 
+#  formato amplo (wide) para um formato longo (long).
+
+# No formato wide, cada linha do dataframe contém informações completas sobre uma única observação, com diferentes variáveis
+# representadas em diferentes colunas. Por outro lado, no formato longo, cada linha do dataframe contém informações sobre
+# apenas uma variável, com as observações correspondentes distribuídas em diferentes linhas.
+
+
+# - Função melt() do pacote reshape2 usada para transformar o data frame df de formato wide (ou seja, com várias colunas)
+#   para long (ou seja, com menos colunas, mas mais linhas). O argumento id é usado para indicar quais colunas não devem
+#   ser transformadas em variáveis e mantidas como identificadores. 
+#   No caso, as colunas nome e chuteira são mantidas como identificadores, enquanto as colunas idade, peso e altura são
+#   transformadas em variáveis.
+
+df_long <- melt(df, id = c('nome', 'chuteira'))
+df_long
+
+
+# Removendo NA utilizando a mesma função melt()
+
+df_long <- melt(df, id = c('nome', 'chuteira'), na.rm = TRUE)
+df_long
+
+
+# "Esticando" o dataframe
+
+# - Função dcast() permite transformar um dataframe de formato longo para um formato wide, ou seja, transformar valores
+#   únicos de variáveis em colunas.
+# - No exemplo, o dataframe df_long está em formato longo, com as variáveis variable e value.
+#   A fórmula nome + chuteira ~ variable especifica que as colunas chuteira e nome são as variáveis que devem ser
+#   preservadas (identificadores únicos) e que a variável variable deve ser usada para criar novas colunas no formato wide.
+
+dcast(df_long, formula = nome + chuteira ~ variable)
+
+dcast(df_long, formula = nome ~ variable)
+
+dcast(df_long, formula = ... ~ variable)                # ... pega 'todas' as colunas
+
+
+
+# Aplicando o reshape2
+
+
+names(airquality) <- tolower(names(airquality))    # renomeando colunas de airquality para minúsculas
+
+dim(airquality)
+View(airquality)
+
+
+# Função melt() - long
+
+# - A função melt() é utilizada para "derreter" um df, isto é, transformá-lo de um formato "wide" para um formato "long".
+#   Isso é feito transformando as variáveis de colunas para linhas, preservando uma ou mais variáveis identificadoras.
+
+# - No caso específico deste exemplo, o dataframe airquality possui 6 colunas: Ozone, Solar.R, Wind, Temp, Month, e Day.
+#   A função melt() transforma estas colunas em duas novas colunas: variable e value, onde a coluna variable corresponde 
+#   ao nome das variáveis originais que foram "derretidas" e a coluna value corresponde aos valores destas variáveis.
+
+
+df_airquality <- melt(airquality)
+
+dim(df_airquality)
+View(df_airquality)
+
+
+
+# Mantendo duas variáveis
+
+# - A função melt() irá transformar todas as colunas de airquality que não são identificadores (month e day) em uma única
+#   coluna chamada variable, e os valores correspondentes a essas colunas em outra coluna chamada value.
+# - id e id.vars mesma coisa
+
+df_airquality2 <- melt(airquality, id.vars = c('month', 'day'))
+
+dim(df_airquality2)
+View(df_airquality2)
+
+# alterando nome das colunas/variáveis
+
+df_airquality2 <- melt(airquality, id.vars = c('month', 'day'),
+                       variable.name = "climate_variable", value.name = "climate_value")
+
+View(df_airquality2)
+
+
+
+# Função dcast() - wide
+
+df_long <- melt(airquality, id.vars = c('month', 'day'))
+
+View(df_long)
+
+df_airquality_wide <- dcast(df_long, month + day ~ variable)
+
+View(df_airquality_wide)
 
 
