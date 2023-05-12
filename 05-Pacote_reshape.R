@@ -1,6 +1,4 @@
-# Remodelagem de Dados com Reshape
-
-# Exercícios
+# Remodelagem de Dados com reshape e reshape2
 
 
 # Configurando o diretório de trabalho
@@ -127,6 +125,7 @@ ggplot(iris_modif2, aes(x = Largura, y = Comprimento, color = Parte)) +   # ggpl
   geom_point() +
   facet_wrap(~ Species) +
   theme(legend.position = "right")
+
 
 
 
