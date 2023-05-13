@@ -126,9 +126,14 @@ View(df3)
 # a) Utilize a função melt para transformar o dataframe df de formato "wide" para "long". Utilize a coluna cidade como
 #    identificador.
 
+df3_modif_a <- melt(df3, id.vars = c('cidade', 'ano'))
+View(df3_modif_a)
+
 
 # b) Utilize a função dcast para transformar o dataframe df_long de formato "long" para "wide", criando uma coluna para cada
 #    ano e utilizando a coluna cidade como identificador.
+
+df3_modif_b <- dcast(df3_modif_a, cidade + ano ~ variable, value.var = "value")
 
 
 
