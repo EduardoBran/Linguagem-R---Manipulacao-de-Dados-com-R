@@ -155,3 +155,9 @@ View(df4)
 # a) Utilize a função melt para transformar o dataframe df de formato "wide" para "long". Utilize as colunas aluno e
 #    disciplina como identificadores.
 
+df4_modif <- melt(df4, id.vars = c('aluno', 'disciplina'))
+View(df4_modif)
+
+
+
+
