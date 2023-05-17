@@ -30,7 +30,7 @@ library(gapminder)
 View(gapminder)
 
 df_gm <- ddply(gapminder,                                   # expecativa de vida máx e min por continente
-               ~ continent,
+               ~ continent,                                 # agrupando por continente
                summarize,
                max_lifeExp_continent = max(lifeExp),
                min_lifeExp_continent = min(lifeExp))

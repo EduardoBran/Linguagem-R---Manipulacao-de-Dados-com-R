@@ -8,6 +8,8 @@ getwd()
 # Instalando e carregando pacotes
 
 library(plyr)
+library(dplyr)
+
 
 
 
@@ -28,6 +30,22 @@ View(vendas)
 
 # Utilize a função ddply para calcular o valor total de vendas por região.
 
+vendas_regiao <- ddply(vendas,
+                       ~ regiao,
+                       summarise,
+                       qtd_regiao = sum(quantidade),
+                       total_regiao = sum(valor))
+View(vendas_regiao)
+
+
+vendas_regiao2 <-
+  vendas %>% 
+  group_by(regiao) %>% 
+  summarise(
+    qtd_regiao = sum(quantidade),
+    total_regiao = sum(valor))
+  
+View(vendas_regiao2)
 
 
 
@@ -42,10 +60,16 @@ alunos <- data.frame(
   disciplina = rep(c("Matemática", "Português", "História"), times = 500),
   nota = round(rnorm(1500, 7, 2), 2)
 )
-View(aunos)
+View(alunos)
 
-#Utilize a função ddply para calcular a média das notas de cada aluno em cada disciplina.
+# Utilize a função ddply para calcular a média das notas de cada aluno em cada disciplina.
 
+media_por_aluno <- ddply(alunos,
+                         ~ aluno,
+                         summarise,
+                         media = mean(nota))
+
+View(media_por_aluno)
 
 
 
@@ -60,10 +84,16 @@ funcionarios <- data.frame(
   departamento = rep(c("Vendas", "RH", "Financeiro"), times = 500),
   salario = round(rnorm(1500, 5000, 1000), 2)
 )
-View(funcionarios)
+head(funcionarios)
 
 # Utilize a função ddply para calcular o salário médio de cada departamento.
 
+salario_medio <- ddply(funcionarios,
+                       ~ departamento,
+                       summarise,
+                       media_salarial_departamento = mean(salario))
+
+head(salario_medio)
 
 
 
@@ -78,9 +108,15 @@ estoque <- data.frame(
   produto = rep(c("A", "B", "C", "D"), times = 500),
   quantidade = sample(1:100, size = 2000, replace = TRUE)
 )
-View(estoque)
+head(estoque)
 
 # Utilize a função ddply para calcular a quantidade total de cada produto em todas as lojas.
+
+qtd_produto <- ddply(estoque,
+                     .(produto),
+                     summarise,
+                     qtd_total = sum(quantidade))
+
 
 
 
