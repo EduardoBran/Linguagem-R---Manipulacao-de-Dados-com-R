@@ -8,6 +8,7 @@ getwd()
 
 
 
+
 # *** Não utilizaremos pacotes para fatiar os dados. Iremos utilizar apenas anotação/sintaxe da Linguagem R ***
 
 # - Muitas das técnicas abaixo podem ser realizadas com a aplicação das funções:
@@ -16,13 +17,10 @@ getwd()
 
 
 
+
 ## Vetores 
 
-
-# Criando vetor
-
 x <- c('A', 'E', 'D', 'B', 'C')
-
 
 # Exbindo todos os dados do vetor
 
@@ -50,7 +48,54 @@ x[c(TRUE, FALSE)]                       # "A" "D" "C"
 x[c(TRUE, FALSE, TRUE, FALSE)]          # "A" "D" "C"
 
 
+# Vetor de caracteres
+
+y <- setNames(x, letters[1:4])
+y
+
+y[c('d', 'c', 'a')]   # "B" "D" "A"
+y[c('d', 'a', 'a')]   # "B" "A" "A" 
 
 
+
+
+
+## Matrizes 
+
+mat <- matrix(1:9, nrow = 3)
+colnames(mat) <- c('A', 'B', 'C')
+mat
+
+mat[1:2, ]
+mat[1:2, 2:3]
+
+
+# Função outer() permite que uma Matriz se comporte como vetores individuais
+
+vals <- outer(1:5, 1:5, FUN = "paste", sep = ',')
+vals
+
+vals[c(4, 15)]
+
+
+
+
+
+## Dataframes
+
+df <- data.frame(x = 1:3, y = 3:1, z = letters[1:3])
+df
+
+df$x
+
+df[df$x == 2, ]     # retorna apenas coluna x com elemento = a 2 e todas as colunas
+
+df[c(1, 3), ]       # retorna as linhas 1 e 3 e todas as colunas
+
+df[, c('x', 'z')]   # retorna colunas escolhidas e todas as linhas
+
+str(df["x"])
+
+str(df[, "x"])
 
 
