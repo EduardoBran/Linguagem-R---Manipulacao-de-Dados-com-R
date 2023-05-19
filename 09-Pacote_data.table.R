@@ -61,6 +61,64 @@ dt3
 
 
 
+# Operações com data.tables
+
+dt4 <- data.table(A = rep(letters[2:1], each = 4L),
+                  B = rep(1:4, each = 2L),
+                  C = sample(8))
+dt4
+
+dt4_op1 <- dt4[, sum(C), by = A]
+dt4_op1
+
+dt4_op2 <- dt4_op1[order(A)]
+dt4_op2
+
+dt4_op3 <- dt4[, sum(B), by = A][order(A)]
+dt4_op3
+
+
+
+
+# Iris
+
+dt_iris <- as.data.table(iris)
+dt_iris
+
+dt_iris2 <- dt_iris[, .(Sepal.Length = median(Sepal.Length),
+                        Sepal.Width = median(Sepal.Width),
+                        Petal.Length = median(Petal.Length),
+                        Petal.Width = median(Petal.Width)),
+                    by = Species]
+
+dt_iris2
+
+
+
+# com o pacote dplyr
+
+dt_iris_dplyr <- dt_iris %>%
+  group_by(Species) %>%
+  summarise(Sepal.Length = median(Sepal.Length),
+            Sepal.Width = median(Sepal.Width),
+            Petal.Length = median(Petal.Length),
+            Petal.Width = median(Petal.Width))
+
+dt_iris_dplyr
+
+
+
+
+# - O parâmetro .SD significa Subset Data e um subset é criado considerando a coluna Species e depois é calculda 
+# - a mediana. O resultado deve ser igual ao comando anterior. 
+# - O .SD faz parte da notação do pacote data.table.
+
+dt_iris3 <- dt_iris[, lapply(.SD, median), by = Species]
+dt_iris3
+
+
+
+
 
 
 
