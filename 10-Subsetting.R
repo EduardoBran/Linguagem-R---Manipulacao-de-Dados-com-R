@@ -99,3 +99,123 @@ str(df["x"])
 str(df[, "x"])
 
 
+# Removendo colunas de dataframes
+
+df <- data.frame(x = 1:3, y = 3:1, z = letters[1:3])
+df
+
+df$z <- NULL
+df
+
+
+# Operadores [], [[]] e $
+
+a <- list(x = 1:3, y = 4:5)
+a
+
+a[1]          # 1 2 3
+
+a[[1]]        # 1 2 3
+
+a[[1]][[1]]   # 1
+
+a[["x"]]      # 1 2 3
+
+
+b <- list(a = list(b = list(c = list(d = 1))))
+b
+
+b[[c('a', 'b', 'c', 'd')]]
+
+
+# chamando coluna com índice
+
+var <- "cyl"
+mtcars$var
+
+mtcars[[var]]
+
+
+x <- list(abc = 1)
+x
+
+x$a        # 1
+
+x[["a"]]   # NULL
+
+x[["abc"]] # 1
+
+
+
+
+
+## Subsetting e atribuição
+
+x <- 1:5
+x
+
+x[c(1, 2)] <- 2:3   # alterando 2 elementos dentro do vetor
+x
+
+x[-1] <- 4:1
+x
+
+
+# Exemplo de subsetting (imprime toda a estrutura do df ao fazer a conversão com lapply)
+
+head(mtcars)
+
+mtcars[] <- lapply(mtcars, as.integer)   # transformou todos os números em inteiros
+
+head(mtcars)
+
+
+# Exemplo de NÃO subsetting (imprime apenas uma lista com os valores, não mantém a estrutura)
+
+mtcars <- lapply(mtcars, as.integer)
+
+head(mtcars)
+
+
+
+
+
+## Lookup tables
+
+x <- c('m', 'f', 'u', 'f', 'f', 'm', 'm')
+x
+
+lookup <- c(m = "Male", f = 'Female', u = NA)
+lookup
+
+lookup[x]
+
+unname(lookup[x])
+
+
+
+
+
+## Usando operadores lógicos
+
+x1 <- 1:10 %% 2 == 0  
+x1                               # retorna entre 1 e 10 quando dividido por 2 for igual a zero
+
+which(x1)
+
+x2 <- which(x1)
+x2
+
+y1 <- 1:10 %% 5 == 0
+y1
+
+y2 <- which(y1)
+y2
+
+intersect(x2, y2)
+
+x1 & y1
+
+union(x2, y2)
+
+setdiff(x2, y2)
