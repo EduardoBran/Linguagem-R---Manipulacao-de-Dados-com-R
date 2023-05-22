@@ -25,13 +25,19 @@ getwd()
 
 # Instalando e carregando pacotes
 
-install.packages('rvest')     # escolhido pois é útil para quem não conhece HTML e CSS
-library(rvest)
+install.packages('rvest')   # pacote escolhido pois é útil para quem não conhece HTML e CSS
 
-library(stringr)          
-library(dplyr)
-library(lubridate)     # trata dadas
+library(rvest)              # utilizado para fazer a extração de informações de páginas da web           
+library(stringr)            # fornece funções para manipulação de strings de texto de forma eficiente     
+library(dplyr)              # fornece um conjunto de funções que permitem filtrar, transformar, resumir e combinar dados
+library(lubridate)          # permite realizar operações comuns em datas
 library(readr)
+
+
+
+
+
+
 
 
 
