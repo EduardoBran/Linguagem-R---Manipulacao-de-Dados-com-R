@@ -31,11 +31,35 @@ library(rvest)              # utilizado para fazer a extração de informações
 library(stringr)            # fornece funções para manipulação de strings de texto de forma eficiente     
 library(dplyr)              # fornece um conjunto de funções que permitem filtrar, transformar, resumir e combinar dados
 library(lubridate)          # permite realizar operações comuns em datas
-library(readr)
+library(readr)              # conjunto de funções rápidas e eficientes para importar e ler dados tabulares em R
+
+
+
+# Leitura da Web Page - Retorna um documento XML que representa toda a estrutura da página web 
+
+webpage <- read_html("https://www.nytimes.com/interactive/2017/06/23/opinion/trumps-lies.html")
+webpage
+
+
+# Extraindo os registros
+
+# - Ao clicar para inspecionar a página html e inspencionando especificamente os elementos/tags onde contém os dados que
+#   queremos usar temos o seguinte formato em html:
+#
+# <span class="short-desc"><strong> DATE </strong> LIE <span class="short-truth"><a href="URL"> EXPLANATION </a></span></span>
+
+results <- 
+  webpage %>% 
+  html_nodes(".short-desc")
+
+results
 
 
 
 
+# Até aqui nós extraimos toda a estrutura html da página (webpage) e depois separamos pela tags escolhidadas (results)
+
+# Agora iremos "limpar" as tags e extrair somente o registro que nos interessa.
 
 
 
