@@ -64,5 +64,74 @@ results
 
 
 
+# Construindo o dataset
+
+
+# criando uma lista vazia com o comprimto de resuls
+
+records <- vector("list", length = length(results))   
+
+
+
+# - for -> seq_along() necessário pois o objeto results não é uma sequência numérica
+#
+# - date -> A função str_c é usada para extrair o texto dentro da tag <strong> de cada elemento results[i], que representa 
+#           a data da mentira e ao mesmo tempo já concatenando com o texto ', 2017' para formatar a data completa.
+#
+# - lie -> A função str_sub extrai o texto dentro da tag <strong> de cada elemento results[i], que representa
+#         o texto com dados da mentira em si.
+#
+# - explanation -> extrai o texto dentro da classe CSS .short-truth de cada elemento results[i], que representa a explicação
+#                  da mentira. A função str_sub é usada para remover os primeiros e últimos caracteres, que são parentes.
+#                  Foi usado o valor 2  (significa que vai tirar o primeiro caracter parentese)
+#                  Foi usado o valor -2 (significa que vai tirar o último caracter parentese)
+#
+# - url -> extrai do atributo href da tag <a> de cada elemento results[i], o texto com link.
+#
+# - records[[i]] - cria um data frame com as variáveis date, lie, explanation e url, e atribui esse data frame ao elemento
+#                  records[[i]].  Ao usar records[[i]], estamos acessando diretamente o elemento i da lista records e
+#                  atribuindo a ele um novo valor, ou seja, estamos preenchendo o elemento i com os dados do registro.
+
+for(i in seq_along(results)){
+  
+  date <- 
+    str_c(results[i] %>%
+            html_nodes("strong") %>% 
+            html_text(trim = TRUE), ', 2017')
+  
+  lie <- 
+    str_sub(results[i] %>% 
+                   html_nodes("strong") %>% 
+                   html_text(trim = TRUE))
+  
+  explanation <- 
+    str_sub(results[i] %>% 
+              html_nodes(".short-truth") %>% 
+              html_text(trim = TRUE), 2, -2)
+  
+  url <- 
+    results[i] %>% 
+    html_nodes("a") %>% 
+    html_attr("href")
+  
+  records[[i]] <- data.frame(date = date,
+                             lie = lie,
+                             explanation = explanation,
+                             url = url)
+}
+
+
+# Dataset final
+
+df <- bind_rows(records)   # combinando todos os elementos da lista records em um único data frame
+
+View(df)
+
+
+# Exportando dataset
+
+write.csv(df, "df")
+  
+  
 
 
