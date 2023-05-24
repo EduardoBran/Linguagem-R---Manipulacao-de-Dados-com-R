@@ -45,6 +45,7 @@ webpage
 
 # - Ao clicar para inspecionar a página html e inspencionando especificamente os elementos/tags onde contém os dados que
 #   queremos usar temos o seguinte formato em html:
+# - Assim iremos extrair todos os elementos HTML que possuem a classe "short-desc" da variável webpage.
 #
 # <span class="short-desc"><strong> DATE </strong> LIE <span class="short-truth"><a href="URL"> EXPLANATION </a></span></span>
 
@@ -57,7 +58,7 @@ results
 
 
 
-# Até aqui nós extraimos toda a estrutura html da página (webpage) e depois separamos pela tags escolhidadas (results)
+# Até aqui nós extraimos toda a estrutura html da página (webpage) e depois separamos pela classe escolhidadas (results)
 
 # Agora iremos "limpar" as tags e extrair somente o registro que nos interessa.
 
@@ -67,9 +68,9 @@ results
 # Construindo o dataset
 
 
-# criando uma lista vazia com o comprimto de resuls
+# criando uma lista vazia com o comprimento de results
 
-records <- vector("list", length = length(results))   
+records <- vector("list", length = length(results))
 
 
 
@@ -77,12 +78,13 @@ records <- vector("list", length = length(results))
 #
 # - date -> A função str_c é usada para extrair o texto dentro da tag <strong> de cada elemento results[i], que representa 
 #           a data da mentira e ao mesmo tempo já concatenando com o texto ', 2017' para formatar a data completa.
+#           O 'trim = TRUE' é para retirar qualquer espaço entre o texto        
 #
-# - lie -> A função str_sub extrai o texto dentro da tag <strong> de cada elemento results[i], que representa
-#         o texto com dados da mentira em si.
+# - lie -> Usamos a função xml_contents() para percorrer tudo dentro de results. Ele gera uma "lista" com todos dados de results.
+#          Assim escolhemos a posicao na lista onde está o dado que nos interessa (aqui é o [2])
 #
 # - explanation -> extrai o texto dentro da classe CSS .short-truth de cada elemento results[i], que representa a explicação
-#                  da mentira. A função str_sub é usada para remover os primeiros e últimos caracteres, que são parentes.
+#                  da mentira. A função str_sub é usada para remover os primeiros e últimos caracteres, que são parenteses.
 #                  Foi usado o valor 2  (significa que vai tirar o primeiro caracter parentese)
 #                  Foi usado o valor -2 (significa que vai tirar o último caracter parentese)
 #
@@ -100,9 +102,7 @@ for(i in seq_along(results)){
             html_text(trim = TRUE), ', 2017')
   
   lie <- 
-    str_sub(results[i] %>% 
-                   html_nodes("strong") %>% 
-                   html_text(trim = TRUE))
+    str_sub(xml_contents(results[i])[2] %>% html_text(trim = TRUE))
   
   explanation <- 
     str_sub(results[i] %>% 
@@ -118,8 +118,11 @@ for(i in seq_along(results)){
                              lie = lie,
                              explanation = explanation,
                              url = url)
+  
+  
+  print(xml_contents(results[i]))
+  
 }
-
 
 # Dataset final
 
@@ -128,9 +131,30 @@ df <- bind_rows(records)   # combinando todos os elementos da lista records em u
 View(df)
 
 
+# Convertendo o campo data para o formato Date em R
+
+summary(df)
+
+df$date <- mdy(df$date)
+
+summary(df)
+
+
+
 # Exportando dataset
 
-write.csv(df, "df")
+write.csv(df, "projeto_mentiras.csv")
+
+
+# Lendo os dados
+
+df <- read_csv("projeto_mentiras.csv")
+View(df)
+  
+  
+  
+  
+  
   
   
 
