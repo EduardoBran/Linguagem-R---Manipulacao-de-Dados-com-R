@@ -80,7 +80,8 @@ records <- vector("list", length = length(results))
 #           a data da mentira e ao mesmo tempo já concatenando com o texto ', 2017' para formatar a data completa.
 #           O 'trim = TRUE' é para retirar qualquer espaço entre o texto        
 #
-# - lie -> Usamos a função xml_contents() para percorrer tudo dentro de results. Ele gera uma "lista" com todos dados de results.
+# - lie -> Função xml_contents é usada para extrair o conteúdo dentro da tag <span class="short-truth">, que representa a explicação
+#          da mentira. Ele gera uma "lista" com todos dados de results.
 #          Assim escolhemos a posicao na lista onde está o dado que nos interessa (aqui é o [2])
 #
 # - explanation -> extrai o texto dentro da classe CSS .short-truth de cada elemento results[i], que representa a explicação
@@ -126,7 +127,7 @@ for(i in seq_along(results)){
 
 # Dataset final
 
-df <- bind_rows(records)   # combinando todos os elementos da lista records em um único data frame
+df <- bind_rows(records)   # Combina todos os elementos da lista records em um único data frame
 
 View(df)
 

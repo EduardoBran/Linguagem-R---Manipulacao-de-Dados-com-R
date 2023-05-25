@@ -4,3 +4,5 @@
 *.csv
 *.Rhistory
 *.RData
+*.dta
+*.sas
