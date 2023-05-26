@@ -26,3 +26,23 @@ summary(vendas)
 
 
 # Stata
+
+df_stata <- read_dta("mov.dta")
+View(df_stata)
+
+class(df_stata)
+str(df_stata)
+summary(df_stata)
+
+
+
+# Pacote Foreign
+
+
+
+
+
+
+
+
+
