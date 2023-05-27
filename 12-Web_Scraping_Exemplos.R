@@ -1,4 +1,4 @@
-# Estudo de Caso - Extraindo Dados da Web com Web Scraping em R
+# Site OGol Web Scraping em R
 
 
 # Configurando o diretório de trabalho
