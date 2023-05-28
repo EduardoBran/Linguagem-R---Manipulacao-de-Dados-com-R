@@ -20,26 +20,50 @@ library(readr)              # conjunto de funções rápidas e eficientes para i
 
 #  Exercício 1: Extração de Dados de uma Lista de Livros
 
-  
+
 # <html>
 #   <head>
-#   <title>Lista de Livros</title>
+#    <title>Lista de Livros</title>
 #   </head>
 #   <body>
-#   <h1>Lista de Livros</h1>
-#   <ul>
-#   <li class="book">Livro 1</li>
-#   <li class="book">Livro 2</li>
-#   <li class="book">Livro 3</li>
-#   </ul>
+#    <h1>Lista de Livros</h1>
+#    <ul class="ulbook">
+#     <li class="book">Livro 1</li>
+#     <li class="book">Livro 2</li>
+#     <li class="book">Livro 3</li>
+#    </ul>
 #   </body>
 # </html>
 
 #   Objetivo: Extrair os títulos dos livros da lista.
 
 
+webpage <- read_html('<html>  <head>  <title>Lista de Livros</title>  </head>  <body>  <h1>Lista de Livros</h1>  <ul class="ulbook">  <li class="book">Livro 1</li>  <li class="book">Livro 2</li>  <li class="book">Livro 3</li>  </ul>  </body></html>')
+webpage
 
 
+results <- 
+  webpage %>% 
+  html_nodes(".ulbook")
+
+results
+
+
+records <- vector("list", length = length(results))
+
+
+for(i in seq_along(results)) {
+  
+  nome_livro <-
+    results[i] %>% 
+    html_nodes(".book") %>% 
+    html_text()
+    
+  records[[i]] <- data.frame(id = seq_along(nome_livro), nome_livro = nome_livro)
+}
+
+df <- bind_rows(records)   # Combina todos os elementos da lista records em um único data frame
+View(df)
 
 
 
@@ -48,39 +72,47 @@ library(readr)              # conjunto de funções rápidas e eficientes para i
 
 #  Exercício 2: Extração de Dados de uma Tabela de Estudantes
 
-
 # <html>
 #   <head>
-#   <title>Tabela de Estudantes</title>
+#    <title>Tabela de Estudantes</title>
 #   </head>
 #   <body>
-#   <h1>Tabela de Estudantes</h1>
-#   <table>
-#   <tr>
-#   <th>Nome</th>
-#   <th>Idade</th>
-#   </tr>
-#   <tr>
-#   <td>Estudante 1</td>
-#   <td>20</td>
-#   </tr>
-#   <tr>
-#   <td>Estudante 2</td>
-#   <td>22</td>
-#   </tr>
-#   <tr>
-#   <td>Estudante 3</td>
-#   <td>19</td>
-#   </tr>
-#   </table>
+#    <h1>Tabela de Estudantes</h1>
+#    <table>
+#     <tr>
+#      <th>Nome</th>
+#      <th>Idade</th>
+#     </tr>
+#     <tr>
+#      <td>Estudante 1</td>
+#      <td>20</td>
+#     </tr>
+#     <tr>
+#      <td>Estudante 2</td>
+#      <td>22</td>
+#     </tr>
+#     <tr>
+#      <td>Estudante 3</td>
+#      <td>19</td>
+#     </tr>
+#    </table>
 #   </body>
 # </html>
-   
+
 #   Objetivo: Extrair os nomes e idades dos estudantes da tabela.
 
 
+webpage <- read_html('<html>  <head>  <title>Tabela de Estudantes</title>  </head>  <body>  <h1>Tabela de Estudantes</h1>  <table>  <tr>  <th>Nome</th>  <th>Idade</th>  </tr>  <tr>  <td>Estudante 1</td>  <td>20</td>  </tr>  <tr>  <td>Estudante 2</td>  <td>22</td>  </tr>  <tr>  <td>Estudante 3</td>  <td>19</td>  </tr>  </table>  </body>  </html>')
+webpage
 
 
+results <- html_table(webpage, fill = TRUE)
+results  
+
+
+df <- results[[1]]
+
+View(df)
 
 
 
@@ -139,7 +171,8 @@ library(readr)              # conjunto de funções rápidas e eficientes para i
 
 
 
-#  Exercício 2: Obtenha o título, data e conteúdo de postagens de um blog.
+
+#  Exercício 5: Obtenha o título, data e conteúdo de postagens de um blog.
   
 # <div class="post">
 #   <h2 class="title">Título da Postagem 1</h2>
@@ -164,9 +197,7 @@ library(readr)              # conjunto de funções rápidas e eficientes para i
   
   
   
-  
-  
-#  Exercício 3: Colete informações de usuários em uma lista de membros de uma comunidade.
+#  Exercício 6, MM: Colete informações de usuários em uma lista de membros de uma comunidade.
 
 # <ul class="members">
 #   <li class="memberli">Usuário 1</li>
