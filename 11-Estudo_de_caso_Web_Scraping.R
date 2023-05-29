@@ -103,7 +103,7 @@ for(i in seq_along(results)){
             html_text(trim = TRUE), ', 2017')
   
   lie <- 
-    str_sub(xml_contents(results[i])[2] %>% html_text(trim = TRUE))
+    str_sub(results[i] %>% html_text(trim = TRUE), 2)
   
   explanation <- 
     str_sub(results[i] %>% 
@@ -121,7 +121,9 @@ for(i in seq_along(results)){
                              url = url)
   
   
-  print(xml_contents(results[i]))
+  print(lie)
+  
+  
   
 }
 
