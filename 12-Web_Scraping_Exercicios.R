@@ -274,6 +274,8 @@ for(i in seq_along(results)){
     gsub(",", ".", .) %>% 
     as.numeric()
   
+  print(titulo)
+  
   records[[i]] <- data.frame(titulo = titulo, descricao = descricao, preco = preco)
 }
 
@@ -326,27 +328,80 @@ summary(df)
 #   </body>
 # </html>
 
-
 webpage <- read_html('<html>  <head>   <title>Página de Notícias</title>  </head>  <body>   <div class="post">    <h2 class="title">Título da Postagem 1</h2>    <span class="date">01/01/2022</span>    <div class="content">     <p>Conteúdo da postagem 1...</p>    </div>   </div>   <div class="post">    <h2 class="title">Título da Postagem 2</h2>    <span class="date">02/01/2022</span>    <div class="content">     <p>Conteúdo da postagem 2...</p>    </div>   </div>   <div class="post">    <h2 class="title">Título da Postagem 3</h2>    <span class="date">03/01/2022</span>    <div class="content">     <p>Conteúdo da postagem 3...</p>    </div>   </div>   <div class="post">    <h2 class="title">Título da Postagem 4</h2>    <span class="date">04/01/2022</span>    <div class="content">     <p>Conteúdo da postagem 4...</p>    </div>   </div>  </body></html>')
 webpage
 
+results <- 
+  webpage %>% 
+  html_nodes('.post')
+results
+
+records <- vector("list", length = length(results))
+
+for(i in seq_along(results)){
+  
+  titulo <- 
+    results[i] %>% 
+    html_nodes('.title') %>% 
+    html_text(trim = TRUE)
+  
+  data <- 
+    results[i] %>% 
+    html_nodes('.date') %>% 
+    html_text(trim = TRUE)
+  
+  conteudo <- 
+    results[i] %>% 
+    html_nodes('.content') %>% 
+    html_text(trim = TRUE)
+  
+  records[[i]] <- data.frame(titulo = titulo, data = data, conteudo = conteudo)
+}
+
+df <- bind_rows(records)
+View(df)
+summary(df)
+
+df$data <- mdy(df$data)
+summary(df)
+
+  
 
 
 
   
-  
-#  Exercício 6, MM: Colete informações de usuários em uma lista de membros de uma comunidade.
+#  Exercício 6: Colete informações de usuários em uma lista de membros de uma comunidade.
 
-# <ul class="members">
-#   <li class="memberli">Usuário 1</li>
-#   <li class="memberli">Usuário 2</li>
-#   <li class="memberli">Usuário 3</li>
-# </ul>
+# <html>
+#   <head>
+#    <title>Página de Notícias</title>
+#   </head>
+#   <body>
+#    <ul class="members">
+#     <li class="memberli">Usuário 1</li>
+#     <li class="memberli">Usuário 2</li>
+#     <li class="memberli">Usuário 3</li>
+#    </ul>
+#   </body>
+# </html>
+
+webpage <- read_html('<html>  <head>   <title>Página de Notícias</title>  </head>  <body>   <ul class="members">    <li class="memberli">Usuário 1</li>    <li class="memberli">Usuário 2</li>    <li class="memberli">Usuário 3</li>   </ul>  </body></html>')
+webpage
+
+results <- 
+  webpage %>% 
+  html_nodes('.members')
+results
+
+usuarios <- 
+  results %>% 
+  html_nodes('.memberli') %>% 
+  html_text(trim = TRUE)
+usuarios
 
 
-
-
-
+df <- data.frame(id = seq_along(usuarios), usuarios = usuarios)
+View(df)
 
 
 
