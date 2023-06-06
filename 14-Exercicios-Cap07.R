@@ -8,26 +8,55 @@ getwd()
 
 # Carregando pacotes
 
-library(rvest)
-library(dplyr)
-library(stringr)
-library(tidyr)
+library(rvest)     # é usado para extrair dados de páginas da web. 
+library(dplyr)     # manipulação de dados
+library(stringr)   # manipulação de strings
+library(tidyr)     # manipulação e organização de dados (separar e combinar colunas de dados)
+library(tibble)    # manipula para transformar coluna em índice
 
 
 
 # Exercício 1 - Faça a leitura da url abaixo e grave no objeto pagina
 # http://forecast.weather.gov/MapClick.php?lat=42.31674913306716&lon=-71.42487878862437&site=all&smap=1#.VRsEpZPF84I
 
+pagina <- read_html("http://forecast.weather.gov/MapClick.php?lat=42.31674913306716&lon=-71.42487878862437&site=all&smap=1#.VRsEpZPF84I")
+pagina
+
+
 
 
 
 # Exercício 2 - Da página coletada no item anterior, extraia o texto que contenha as tags:
-# "#detailed-forecast-body b  e .forecast-text"
+# #detailed-forecast e .forecast-text
 
+results <- 
+  pagina %>% 
+  html_nodes("#detailed-forecast")
+
+dia_semana <- 
+  results %>% 
+  html_nodes(".forecast-label") %>% 
+  html_text(trim = TRUE)
+
+dia_semana
+
+texto <- 
+  results %>% 
+  html_nodes(".forecast-text") %>% 
+  html_text(trim = TRUE)
+
+texto
 
 
 
 # Exercício 3 - Transforme o item anterior em texto
+
+df <- data.frame(dia_semana = dia_semana, previsao = texto)
+
+df <- column_to_rownames(df, var = "dia_semana") # transforma coluna em índice
+
+View(df)
+
 
 
 
