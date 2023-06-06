@@ -98,3 +98,101 @@ pagina <- read_html(url)
 
 
 
+
+
+# Exercício 11 - https://pt.wikipedia.org/wiki/Copa_do_Brasil_de_Futebol#Campeões
+# Colete da página dados e monte um dataframe com:
+# - Índice com o ano
+# - Coluna Campeão, Vice, Artilheiro
+
+
+# extraindo dados da estrutra da pagina
+
+webpage <- read_html("https://pt.wikipedia.org/wiki/Copa_do_Brasil_de_Futebol#Campeões")
+webpage
+
+
+# extraindo todas as tabelas de webpage
+
+tabelas <- html_table(webpage, fill = TRUE)                    #  [[7]] campeões [[12]] artilheiros
+tabelas
+
+
+# extraindo e editando tabela de campeões
+
+# extraindo
+tabela_campeoes <- tabelas[[7]]
+
+# transformando primeira linha em nome de coluna
+colnames(tabela_campeoes) <- tabela_campeoes[1, ]
+
+# renomeando nome da coluna
+colnames(tabela_campeoes)[colnames(tabela_campeoes) == "(vde)Ano"] <- "Ano"
+
+
+# editando conteúdo da coluna "Ano"
+tabela_campeoes$Ano <- gsub("Detalhes", "", tabela_campeoes$Ano)
+
+# convertendo coluna "Anos" para o tipo factor
+tabela_campeoes$Ano <- as.factor(tabela_campeoes$Ano)
+summary(tabela_campeoes)
+
+# excluindo primeira e última linha
+tabela_campeoes <- tabela_campeoes[-1, ]
+tabela_campeoes <- tabela_campeoes[-35, ]
+
+# exibindo somente as colunas escolhidas
+tabela_campeoes <- 
+  tabela_campeoes %>% 
+  select(Ano, Campeão, Vice)
+
+View(tabela_campeoes)
+
+
+# extraindo e editando tabela de artilharia
+
+# extraindo
+tabela_artilheiros <- tabelas[[12]]
+
+# convertendo coluna "Anos" para o tipo factor
+tabela_artilheiros$Ano <- as.factor(tabela_artilheiros$Ano)
+
+View(tabela_artilheiros)
+
+
+# Unindo os dois dataframes em um só de acordo com a coluna 'Ano"
+
+df_juntos <- merge(tabela_campeoes, tabela_artilheiros, by = 'Ano')
+View(df_juntos)
+
+# Agrupar os dados por ano e combinar os artilheiros em uma única linha
+
+df_final <- aggregate(. ~ Ano, data = df_juntos, FUN = function(x) paste(x, collapse = ", "))
+View(df_final)
+
+# Editando colunas Campeão, Vice e Gols para ter somente o primeiro valor
+
+df_final <- 
+  df_final %>%
+  separate(Campeão, into = c("Campeão", "Outros_Campeão"), sep = ",", extra = "drop") %>%
+  select(-Outros_Campeão)
+
+df_final <- 
+  df_final %>%
+  separate(Vice, into = c("Vice", "Outros_Vice"), sep = ",", extra = "drop") %>%
+  select(-Outros_Vice)
+
+df_final <- df_final %>%
+  separate(Gols, into = c("Gols", "Outros_Gols"), sep = ",", extra = "drop") %>%
+  select(-Outros_Gols)
+
+
+# Convertendo colunas para o tipo factor
+df_final$Campeão <- as.factor(df_final$Campeão)
+df_final$Vice <- as.factor(df_final$Vice)
+summary(df_final)
+
+View(df_final)
+
+
+
