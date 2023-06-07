@@ -14,6 +14,7 @@ library(stringr)   # manipulação de strings
 library(tidyr)     # manipulação e organização de dados (separar e combinar colunas de dados)
 library(tibble)    # manipula para transformar coluna em índice
 
+library(ggplot2)
 
 
 # Exercício 1 - Faça a leitura da url abaixo e grave no objeto pagina
@@ -61,29 +62,51 @@ View(df)
 
 
 
-# Exercício 4 - Extraímos a página web abaixo para você. Agora faça a coleta da tag "table"
+# Exercício 4
+# - Extraia a página web 'http://espn.go.com/nfl/superbowl/history/winners' 
+#   e em seguida faça a coleta da tag "table"
+
 url <- 'http://espn.go.com/nfl/superbowl/history/winners'
 pagina <- read_html(url)
+pagina
 
+results <- html_table(pagina, fill = TRUE) 
+results
 
 
 
 # Exercício 5 - Converta o item anterior em um dataframe
 
+df_superbowl <- data.frame(results[[1]])
+View(df_superbowl)
 
 
 
 # Exercício 6 - Remova as duas primeiras linhas e adicione nomes as colunas
 
+df_superbowl <- df_superbowl[-1, ]
+colnames(df_superbowl) <- df_superbowl[1, ]
+df_superbowl <- df_superbowl[-1, ]
+rownames(df_superbowl) <- NULL                 # Redefinir os índices das linhas
+
+View(df_superbowl)
 
 
 
-# Exercício 7 - Converta de algarismos romanos para números inteiros
+
+# Exercício 7 - Converta os algoritmos romanos para números inteiros
+
+df_superbowl$NO. <- 1:57
+
+str(df_superbowl)
+View(df_superbowl)
 
 
 
 
-# Exercício 8 - Divida as colunas em 4 colunas
+# Exercício 8 - Divida a coluna em 'RESULT' nas colunas 'WINNER', 'LOSER' e 'SCORE'
+
+
 
 
 
@@ -109,7 +132,6 @@ pagina <- read_html(url)
 # extraindo dados da estrutra da pagina
 
 webpage <- read_html("https://pt.wikipedia.org/wiki/Copa_do_Brasil_de_Futebol#Campeões")
-webpage
 
 
 # extraindo todas as tabelas de webpage
@@ -196,3 +218,8 @@ View(df_final)
 
 
 
+
+
+
+
+  

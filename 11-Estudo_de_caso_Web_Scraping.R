@@ -120,11 +120,6 @@ for(i in seq_along(results)){
                              explanation = explanation,
                              url = url)
   
-  
-  print(lie)
-  
-  
-  
 }
 
 # Dataset final
