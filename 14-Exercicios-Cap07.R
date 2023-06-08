@@ -222,4 +222,32 @@ View(df_final)
 
 
 
+
+# Criando df para gráfico
+
+top_times_campeoes <- 
+  df_final %>% 
+  count(Campeão) %>% 
+  arrange(desc(n))
+
+colnames(top_times_campeoes)[colnames(top_times_campeoes) == 'n'] <- 'Títulos'
+
+top_times_campeoes
+
+# Criar nova coluna para agrupar os times com a mesma quantidade de títulos
+top_times_campeoes$Grupo <- factor(top_times_campeoes$Títulos, levels = unique(top_times_campeoes$Títulos))
+
+# Definir vetor de cores para cada time
+cores <- c("red", "green", "blue", "yellow", "blue", "purple", "cyan", "magenta", "gray", "brown", "blue", "darkgreen", "darkblue", "darkred", "darkorange", "darkgray")
+
+# Criar o gráfico de barras
+grafico <- ggplot(top_times_campeoes, aes(x = Grupo, y = Títulos, fill = Campeão)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(x = "", y = "Número de Títulos") +
+  scale_fill_manual(values = cores)
+
+grafico
+
+
+
   
