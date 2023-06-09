@@ -106,18 +106,39 @@ View(df_superbowl)
 
 # Exercício 8 - Divida a coluna em 'RESULT' nas colunas 'WINNER', 'LOSER' e 'SCORE'
 
+# criando coluna SCORE
+
+df_superbowl2 <-
+  df_superbowl %>%
+  rowwise() %>%
+  mutate(RESULT_NUM = str_extract_all(RESULT, "\\d+"),
+         SCORE = paste(unlist(RESULT_NUM), collapse = ' - ')) %>% 
+  select(-RESULT_NUM)
+
+View(df_superbowl2)
 
 
+# criando colunas WINNER e LOSER
+
+df_superbowl3 <- 
+  df_superbowl2 %>% 
+  separate(RESULT, into = c("WINNER", "LOSER"), sep = "\\, ")
 
 
+# excluindo valores numéricos das colunas WINNER e LOSER
 
-# Exercício 9 - Inclua mais 2 colunas com o score dos vencedores e perdedores
-# Dica: Você deve fazer mais uma divisão nas colunas
+df_superbowl_final <- 
+  df_superbowl3 %>% 
+  mutate(WINNER = trimws(gsub("\\d+", "", WINNER)),                  # trimws remove último " "
+         LOSER = trimws(gsub("\\d+", "", LOSER)))
 
 
+str(df_superbowl_final)
+View(df_superbowl_final)
 
 
 # Exercício 10 - Grave o resultado em um arquivo csv
+
 
 
 
