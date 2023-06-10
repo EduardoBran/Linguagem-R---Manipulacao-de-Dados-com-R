@@ -139,7 +139,7 @@ View(df_superbowl_final)
 
 # Exercício 10 - Grave o resultado em um arquivo csv
 
-
+write.csv(df_superbowl_final, 'superbowl.csv', row.names = F)
 
 
 
