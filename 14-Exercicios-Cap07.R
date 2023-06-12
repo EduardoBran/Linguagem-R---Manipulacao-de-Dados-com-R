@@ -184,10 +184,29 @@ summary(tabela_campeoes)
 tabela_campeoes <- tabela_campeoes[-1, ]
 tabela_campeoes <- tabela_campeoes[-35, ]
 
+# criando colunas Placar Jogo Ida e Placar Jogo Volta a partir do 6º caractere
+
+tabela_campeoes$Placares[13] <- "2 – 2  3 – 1"
+tabela_campeoes$Placares[33] <- "4 – 0  2 – 1"
+
+tabela_campeoes2 <- 
+  tabela_campeoes %>% 
+  separate(Placares, into = c('Placar_Jogo_Ida', 'Placar_Jogo_Volta'), sep = 6 , extra = 'drop')
+
+tabela_campeoes2$Placar_Jogo_Volta[27] <- "2 – 1  * 4 – 3 (pen)"
+tabela_campeoes2$Placar_Jogo_Volta[29] <- "0 – 0  * 5 – 3 (pen)"
+tabela_campeoes2$Placar_Jogo_Ida[34] <-  "0 - 0"
+tabela_campeoes2$Placar_Jogo_Volta[34] <- "1 – 1  * 6 – 5 (pen)"
+
+rows_to_edit <- c(1:24, 33)
+tabela_campeoes2$Placar_Jogo_Volta[rows_to_edit] <- substr(tabela_campeoes2$Placar_Jogo_Volta[rows_to_edit], 2, nchar(tabela_campeoes2$Placar_Jogo_Volta[rows_to_edit]))
+
+
+
 # exibindo somente as colunas escolhidas
 tabela_campeoes <- 
-  tabela_campeoes %>% 
-  select(Ano, Campeão, Vice)
+  tabela_campeoes2 %>% 
+  select(Ano, Campeão, Vice, Placar_Jogo_Ida, Placar_Jogo_Volta)
 
 View(tabela_campeoes)
 
@@ -213,7 +232,7 @@ View(df_juntos)
 df_final <- aggregate(. ~ Ano, data = df_juntos, FUN = function(x) paste(x, collapse = ", "))
 View(df_final)
 
-# Editando colunas Campeão, Vice e Gols para ter somente o primeiro valor
+# Editando colunas Campeão, Vice e Gols para ter somente o primeiro valor (criando uma nova coluna com o conteudo apos a vrgula e depois excluindo)
 
 df_final <- 
   df_final %>%
@@ -224,6 +243,16 @@ df_final <-
   df_final %>%
   separate(Vice, into = c("Vice", "Outros_Vice"), sep = ",", extra = "drop") %>%
   select(-Outros_Vice)
+
+df_final <- 
+  df_final %>%
+  separate(Placar_Jogo_Ida, into = c("Placar_Jogo_Ida", "Outros_Placar_Jogo_Ida"), sep = ",", extra = "drop") %>%
+  select(-Outros_Placar_Jogo_Ida)
+
+df_final <- 
+  df_final %>%
+  separate(Placar_Jogo_Volta, into = c("Placar_Jogo_Volta", "Outros_Placar_Jogo_Volta"), sep = ",", extra = "drop") %>%
+  select(-Outros_Placar_Jogo_Volta)
 
 df_final <- df_final %>%
   separate(Gols, into = c("Gols", "Outros_Gols"), sep = ",", extra = "drop") %>%
@@ -236,11 +265,6 @@ df_final$Vice <- as.factor(df_final$Vice)
 summary(df_final)
 
 View(df_final)
-
-
-
-
-
 
 
 
