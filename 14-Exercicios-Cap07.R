@@ -8,11 +8,12 @@ getwd()
 
 # Carregando pacotes
 
-library(rvest)     # é usado para extrair dados de páginas da web. 
-library(dplyr)     # manipulação de dados
-library(stringr)   # manipulação de strings
-library(tidyr)     # manipulação e organização de dados (separar e combinar colunas de dados)
-library(tibble)    # manipula para transformar coluna em índice
+library(rvest)      # é usado para extrair dados de páginas da web. 
+library(dplyr)      # manipulação de dados
+library(stringr)    # manipulação de strings
+library(tidyr)      # manipulação e organização de dados (separar e combinar colunas de dados)
+library(tibble)     # manipula para transformar coluna em índice
+library(lubridate)  # permite realizar operações comuns em datas
 
 library(ggplot2)
 
@@ -84,13 +85,12 @@ View(df_superbowl)
 
 # Exercício 6 - Remova as duas primeiras linhas e adicione nomes as colunas
 
-df_superbowl <- df_superbowl[-1, ]
-colnames(df_superbowl) <- df_superbowl[1, ]
-df_superbowl <- df_superbowl[-1, ]
-rownames(df_superbowl) <- NULL                 # Redefinir os índices das linhas
+df_superbowl <- df_superbowl[-1, ]             # remove primeira linha
+colnames(df_superbowl) <- df_superbowl[1, ]    # transforma a primeira linha em nome de coluna
+df_superbowl <- df_superbowl[-1, ]             # remove primeira linha
+rownames(df_superbowl) <- NULL                 # redefinir os índices das linhas
 
 View(df_superbowl)
-
 
 
 
@@ -103,41 +103,80 @@ View(df_superbowl)
 
 
 
-
 # Exercício 8 - Divida a coluna em 'RESULT' nas colunas 'WINNER', 'LOSER' e 'SCORE'
 
 # criando coluna SCORE
+
+# - rowwise() indica que as operações subsequentes devem ser aplicadas em cada linha individualmente. é usado para garantir
+#   que as operações de extração de números da coluna "RESULT" sejam aplicadas individualmente em cada linha
 
 df_superbowl2 <-
   df_superbowl %>%
   rowwise() %>%
   mutate(RESULT_NUM = str_extract_all(RESULT, "\\d+"),
-         SCORE = paste(unlist(RESULT_NUM), collapse = ' - ')) %>% 
+         SCORE = paste(RESULT_NUM, collapse = ' - ')) %>% 
   select(-RESULT_NUM)
 
 View(df_superbowl2)
 
 
-# criando colunas WINNER e LOSER
+# criando colunas WINNER e LOSER usando a ',' como separador
 
 df_superbowl3 <- 
   df_superbowl2 %>% 
   separate(RESULT, into = c("WINNER", "LOSER"), sep = "\\, ")
 
+View(df_superbowl3)
 
-# excluindo valores numéricos das colunas WINNER e LOSER
+
+# excluindo valores numéricos das colunas WINNER e LOSER (d+ é todo valor numérico)
 
 df_superbowl_final <- 
   df_superbowl3 %>% 
   mutate(WINNER = trimws(gsub("\\d+", "", WINNER)),                  # trimws remove último " "
          LOSER = trimws(gsub("\\d+", "", LOSER)))
 
-
 str(df_superbowl_final)
+summary(df_superbowl_final)
 View(df_superbowl_final)
 
 
-# Exercício 10 - Grave o resultado em um arquivo csv
+# convertendo colunas
+
+df_superbowl_final$DATE <- mdy(df_superbowl_final$DATE)             # convertendo coluna DATE   para tipo date
+df_superbowl_final$SITE <- as.factor(df_superbowl_final$SITE)       # convertendo coluna SITE   para tipo factor
+df_superbowl_final$WINNER <- as.factor(df_superbowl_final$WINNER)   # convertendo coluna WINNER para tipo factor
+df_superbowl_final$LOSER <- as.factor(df_superbowl_final$LOSER)     # convertendo coluna LOSER  para tipo factor
+  
+str(df_superbowl_final)
+summary(df_superbowl_final)
+View(df_superbowl_final)
+
+
+# gerando gráficos
+
+# gráfico de barra com vencedores e perdedores
+
+df_vencedor <- 
+  df_superbowl_final %>% 
+  count(WINNER) %>% 
+  arrange(desc(n))
+
+df_vencedor$WINNER <- factor(df_vencedor$WINNER, levels = df_vencedor$WINNER) # para transformar a coluna "WINNER" em um fator e especificamos os níveis como a própria coluna "WINNER". Isso garante que o gráfico seja plotado na ordem correta, de acordo com a contagem de títulos.
+
+head(df_vencedor)
+
+grafico_vencedor <-
+  ggplot(df_vencedor, aes(x = WINNER, y = n)) +
+  geom_bar(stat = 'identity', fill = "steelblue")  +
+  labs(x = "Time", y = "Contagem de Super Bowls vencidos",
+       title = "Contagem de Super Bowls vencidos por time") +
+  theme_minimal()
+
+grafico_vencedor
+
+
+# Exercício 10 - Grave o resultado do exercício anterior em um arquivo csv
 
 write.csv(df_superbowl_final, 'superbowl.csv', row.names = F)
 
